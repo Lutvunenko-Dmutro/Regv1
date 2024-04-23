@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Microservices Example</title>
+</head>
+<body>
+
+    <!-- Users Service -->
+    <h2>Users Service</h2>
+    <button onclick="registerUser()">Register User</button>
+    <button onclick="getUser()">Get User</button>
+    <div id="usersOutput"></div>
+
+    <!-- Subscriptions Service -->
+    <h2>Subscriptions Service</h2>
+    <button onclick="createSubscription()">Create Subscription</button>
+    <button onclick="getUserSubscriptions()">Get User Subscriptions</button>
+    <div id="subscriptionsOutput"></div>
+
+    <!-- Auth Service -->
+    <h2>Auth Service</h2>
+    <button onclick="loginUser()">Login</button>
+    <div id="authOutput"></div>
+
+    <script>
+        async function registerUser() {
+            const newUser = {
+                username: 'testUser',
+                password: 'testPassword'
+            };
+
+            const response = await fetch('http://localhost:3002/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newUser)
+            });
+
+            const data = await response.json();
+            document.getElementById('authOutput').innerText = JSON.stringify(data);
+        }
+
+        async function getUser() {
+            const username = 'testUser'; // replace with actual username
+            const response = await fetch(`http://localhost:3000/users/${username}`);
+            const data = await response.json();
+            document.getElementById('usersOutput').innerText = JSON.stringify(data);
+        }
+
+        async function createSubscription() {
+            const newSubscription = {
+                user: 'testUser',
+                targetUser: 'anotherUser'
+            };
+
+            const response = await fetch('http://localhost:3001/subscriptions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newSubscription)
+            });
+
+            const data = await response.json();
+            document.getElementById('subscriptionsOutput').innerText = JSON.stringify(data);
+        }
+
+        async function getUserSubscriptions() {
+            const username = 'testUser'; // replace with actual username
+            const response = await fetch(`http://localhost:3001/subscriptions/${username}`);
+            const data = await response.json();
+            document.getElementById('subscriptionsOutput').innerText = JSON.stringify(data);
+        }
+
+        async function loginUser() {
+            const credentials = {
+                username: 'testUser',
+                password: 'testPassword'
+            };
+
+            const response = await fetch('http://localhost:3002/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(credentials)
+            });
+
+            const data = await response.json();
+            document.getElementById('authOutput').innerText = JSON.stringify(data);
+        }
+    </script>
+
+</body>
+</html>
